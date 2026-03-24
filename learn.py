@@ -25,3 +25,5 @@ try:
     print(response.choices[0].message.content)
 except Exception as e:
     print(f"出错啦: {e}")
+
+print("简单的更改用于测试git")
