@@ -9,6 +9,8 @@ MNIST 手写数字识别（入门学习版）
 5) 可视化：展示部分预测结果，直观看模型是否学会识别数字
 """
 
+import random
+
 import matplotlib.pyplot as plt
 import torch
 from torch import nn
@@ -210,9 +212,12 @@ def show_predictions(model, loader, device, num_images: int = 8):
     - T 表示 True（真实标签）
     """
     model.eval()
-    images, labels = next(iter(loader))
-    images = images[:num_images].to(device)
-    labels = labels[:num_images]
+    dataset = loader.dataset
+    num_images = min(num_images, len(dataset))
+    indices = random.sample(range(len(dataset)), k=num_images)
+
+    images = torch.stack([dataset[idx][0] for idx in indices]).to(device)
+    labels = torch.tensor([dataset[idx][1] for idx in indices])
 
     logits = model(images)
     preds = logits.argmax(dim=1).cpu()
